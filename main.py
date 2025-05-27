@@ -1,11 +1,10 @@
 import io
 import uvicorn
-import json
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from typing import Optional
-import time
+import os
 
 # Import các hàm từ module image_to_text đã tái cấu trúc
 from image_to_text import (
@@ -104,4 +103,8 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import os
+    # Lấy PORT từ biến môi trường nếu có (cần thiết cho các dịch vụ như Render)
+    # Nếu không có biến môi trường PORT, sử dụng port 8000 mặc định
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
